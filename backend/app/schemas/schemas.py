@@ -29,7 +29,24 @@ class HoldOut(BaseModel):
     end_col: int
     party_size: int
     status: str
+    couple_cols: list[int] = []  # couple-pair columns included in this hold
     model_config = {"from_attributes": True}
+
+
+class CouplePairOut(BaseModel):
+    id: int
+    hall_id: int
+    row: int
+    left_col: int
+    right_col: int
+    label: str
+    model_config = {"from_attributes": True}
+
+
+class CouplePairUpsert(BaseModel):
+    row: int = Field(ge=1)
+    left_col: int = Field(ge=1)
+    label: str = "情侣座"
 
 
 class HoldRequest(BaseModel):
@@ -53,6 +70,7 @@ class SeatMapCell(BaseModel):
     is_aisle: bool
     occupied: bool
     heat: float
+    couple: bool = False
 
 
 class SeatMapOut(BaseModel):

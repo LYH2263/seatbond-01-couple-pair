@@ -14,6 +14,7 @@ class Hall(Base):
     cols: Mapped[int] = mapped_column(Integer)
     aisle_cols: Mapped[str] = mapped_column(String(80), default="")  # comma-separated
     showtimes: Mapped[list["Showtime"]] = relationship(back_populates="hall")
+    couple_pairs: Mapped[list["CouplePair"]] = relationship(back_populates="hall")
 
 
 class Showtime(Base):
@@ -24,6 +25,24 @@ class Showtime(Base):
     start_at: Mapped[datetime] = mapped_column(DateTime)
     hall: Mapped[Hall] = relationship(back_populates="showtimes")
     holds: Mapped[list["SeatHold"]] = relationship(back_populates="showtime")
+
+
+class CouplePair(Base):
+    """A registered couple pair: two adjacent columns in one row of a hall."""
+
+    __tablename__ = "couple_pairs"
+    __table_args__ = (UniqueConstraint("hall_id", "row", "left_col", name="uq_pair_seat"),)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    hall_id: Mapped[int] = mapped_column(ForeignKey("halls.id"))
+    row: Mapped[int] = mapped_column(Integer)
+    left_col: Mapped[int] = mapped_column(Integer)  # pair covers left_col and left_col + 1
+    label: Mapped[str] = mapped_column(String(40), default="情侣座")
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    hall: Mapped[Hall] = relationship(back_populates="couple_pairs")
+
+    @property
+    def right_col(self) -> int:
+        return self.left_col + 1
 
 
 class SeatHold(Base):
@@ -37,6 +56,8 @@ class SeatHold(Base):
     end_col: Mapped[int] = mapped_column(Integer)
     party_size: Mapped[int] = mapped_column(Integer)
     status: Mapped[str] = mapped_column(String(20), default="held")
+    # comma-separated couple-pair columns included in this hold, "" when none
+    couple_cols: Mapped[str] = mapped_column(String(40), default="")
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
     showtime: Mapped[Showtime] = relationship(back_populates="holds")
 

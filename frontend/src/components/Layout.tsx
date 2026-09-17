@@ -19,6 +19,7 @@ type Hold = {
   end_col: number;
   party_size: number;
   status: string;
+  couple_cols: number[];
 };
 
 export default function Layout() {
@@ -84,6 +85,7 @@ export default function Layout() {
               <div className="stub-code">{h.order_code}</div>
               <div className="stub-meta">
                 R{h.row} · C{h.start_col}-{h.end_col}
+                {h.couple_cols?.length > 0 && ` ♥C${h.couple_cols.join("-")}`}
               </div>
               <div className="stub-meta">{h.party_size} 人 · {h.status}</div>
             </div>

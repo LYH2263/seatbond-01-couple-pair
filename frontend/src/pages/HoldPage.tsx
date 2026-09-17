@@ -9,6 +9,7 @@ type Hold = {
   start_col: number;
   end_col: number;
   party_size: number;
+  couple_cols: number[];
 };
 
 export default function HoldPage() {
@@ -35,7 +36,8 @@ export default function HoldPage() {
       if (prefRow) body.preferred_row = Number(prefRow);
       const hold = await api<Hold>("/holds", { method: "POST", body: JSON.stringify(body) });
       setLast(hold);
-      setMsg(`已锁座 ${hold.order_code}：第${hold.row}排 ${hold.start_col}-${hold.end_col}`);
+      const couple = hold.couple_cols?.length ? `（含情侣对 C${hold.couple_cols.join("-")} ♥）` : "";
+      setMsg(`已锁座 ${hold.order_code}：第${hold.row}排 ${hold.start_col}-${hold.end_col}${couple}`);
     } catch (e) {
       setErr(e instanceof Error ? e.message : String(e));
     }
@@ -79,6 +81,7 @@ export default function HoldPage() {
       {last && (
         <p className="mono">
           订单 {last.order_code} · {last.party_size} 人 · R{last.row} C{last.start_col}-{last.end_col}
+          {last.couple_cols?.length > 0 && ` · 情侣对 C${last.couple_cols.join("-")} ♥`}
         </p>
       )}
     </>

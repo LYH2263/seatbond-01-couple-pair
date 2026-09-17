@@ -10,6 +10,7 @@ type Hold = {
   end_col: number;
   party_size: number;
   status: string;
+  couple_cols: number[];
 };
 
 export default function OrdersPage() {
@@ -27,6 +28,7 @@ export default function OrdersPage() {
             <th>场次</th>
             <th>座位</th>
             <th>人数</th>
+            <th>情侣对</th>
             <th>状态</th>
           </tr>
         </thead>
@@ -39,6 +41,9 @@ export default function OrdersPage() {
                 R{h.row} C{h.start_col}-{h.end_col}
               </td>
               <td>{h.party_size}</td>
+              <td className="mono">
+                {h.couple_cols?.length ? `C${h.couple_cols.join("-")} ♥` : "—"}
+              </td>
               <td>{h.status}</td>
             </tr>
           ))}
