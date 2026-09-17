@@ -2,7 +2,14 @@ import { useEffect, useMemo, useState } from "react";
 import { api } from "../api/client";
 
 type Show = { id: number; film_title: string; hall_name?: string };
-type Cell = { row: number; col: number; is_aisle: boolean; occupied: boolean; heat: number };
+type Cell = {
+  row: number;
+  col: number;
+  is_aisle: boolean;
+  occupied: boolean;
+  heat: number;
+  pair_id?: number | null;
+};
 type MapOut = { showtime_id: number; hall_name: string; rows: number; cols: number; cells: Cell[] };
 
 export default function SeatMapPage() {
@@ -42,7 +49,7 @@ export default function SeatMapPage() {
         </label>
         {map && (
           <span className="mono">
-            {map.hall_name} · {map.rows}×{map.cols} · 热力座图
+            {map.hall_name} · {map.rows}×{map.cols} · 热力座图 · 金框=情侣对（整对锁座）
           </span>
         )}
       </div>
@@ -52,15 +59,21 @@ export default function SeatMapPage() {
           {map.cells.map((c) => (
             <div
               key={`${c.row}-${c.col}`}
-              className={`seat ${c.is_aisle ? "aisle" : c.occupied ? "occ" : "free"}`}
-              title={`R${c.row}C${c.col}`}
+              className={`seat ${c.is_aisle ? "aisle" : c.occupied ? "occ" : "free"}${
+                c.pair_id ? " couple" : ""
+              }`}
+              title={
+                c.pair_id
+                  ? `R${c.row}C${c.col} · 情侣对（须整对锁座）`
+                  : `R${c.row}C${c.col}`
+              }
               style={
                 !c.is_aisle && c.heat
                   ? { boxShadow: `inset 0 0 0 1px rgba(255,180,80,${Math.min(0.9, c.heat / 10)})` }
                   : undefined
               }
             >
-              {c.is_aisle ? "" : c.col}
+              {c.is_aisle ? "" : c.pair_id ? `${c.col}♥` : c.col}
             </div>
           ))}
         </div>

@@ -276,3 +276,45 @@ button:disabled { opacity: .5; cursor: not-allowed; }
   box-shadow: inset 0 -3px 0 #a83828, 0 0 8px rgba(232, 93, 76, .35);
 }
 .seat.aisle { background: var(--aisle); opacity: .3; }
+.seat.couple {
+  outline: 2px solid rgba(232, 196, 106, .9);
+  outline-offset: -2px;
+  border-radius: 6px 6px 10px 10px;
+}
+
+/* —— 情侣对编排 —— */
+.pair-panel {
+  margin-top: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #150c12;
+  padding: .75rem .9rem .25rem;
+}
+.pair-panel h3 {
+  margin: 0 0 .6rem;
+  font-size: .95rem;
+  color: var(--cinema-gold);
+  display: flex;
+  align-items: baseline;
+  gap: .75rem;
+  flex-wrap: wrap;
+}
+.pair-hint { font-size: .72rem; color: var(--cinema-muted); font-weight: 400; }
+.row-sel td { background: rgba(232, 196, 106, .08); }
+.btn-ghost {
+  background: transparent;
+  color: var(--cinema-gold);
+  border: 1px solid #6a5a30;
+  padding: .25rem .55rem;
+  font-size: .78rem;
+}
+.kind-badge {
+  display: inline-block;
+  padding: .1rem .45rem;
+  border-radius: 999px;
+  font-size: .72rem;
+  border: 1px solid #4a3040;
+}
+.kind-half_pair { color: #ffb3c8; border-color: #8a3a55; background: rgba(232, 93, 120, .12); }
+.kind-no_contiguous { color: #9fc3ea; border-color: #2a4a6e; background: rgba(42, 74, 110, .18); }
+.kind-overlap { color: #ffc98a; border-color: #8a5a2a; background: rgba(232, 150, 76, .12); }
